@@ -1,5 +1,5 @@
 ---
-name: build-ublue-custom
+name: build-redfin
 on:
   pull_request:
     branches:
@@ -15,7 +15,7 @@ on:
 
 env:
   MY_IMAGE_NAME: "${{ github.event.repository.name }}"  # the name of the image produced by this build, matches repo names
-  MY_IMAGE_DESC: "My Customized Universal Blue Image"
+  MY_IMAGE_DESC: "Project Bluefin with Asus modifications"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
 
 concurrency:
@@ -31,6 +31,15 @@ jobs:
       contents: read
       packages: write
       id-token: write
+
+    strategy:
+      matrix:
+        variant:
+          - {suffix: "-main", description: ""}
+          - {suffix: "-dx", description: "Developer Experience"}
+        gpu:
+          - {suffix: "-main", description: ""}
+          - {suffix: "-nvidia", description: "with Nvidia"}
 
     steps:
       # Checkout push-to-registry action GitHub repository
@@ -86,12 +95,12 @@ jobs:
         id: meta
         with:
           images: |
-            ${{ env.MY_IMAGE_NAME }}
+            ${{ env.MY_IMAGE_NAME }}${{ matrix.variant.suffix }}${{ matrix.gpu.suffix }}
 
           labels: |
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/${{ github.repository }}/main/README.md
-            org.opencontainers.image.description=${{ env.MY_IMAGE_DESC }}
-            org.opencontainers.image.title=${{ env.MY_IMAGE_NAME }}
+            org.opencontainers.image.description=${{ env.MY_IMAGE_DESC }}${{ matrix.variant.description }}${{ matrix.gpu.description }}
+            org.opencontainers.image.title=${{ env.MY_IMAGE_NAME }}${{ matrix.variant.suffix }}${{ matrix.gpu.suffix }}
 
       # Build image using Buildah action
       - name: Build Image
@@ -102,10 +111,12 @@ jobs:
             ./Containerfile
           # Postfix image name with -custom to make it a little more descriptive
           # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
-          image: ${{ env.MY_IMAGE_NAME }}
+          image: ${{ env.MY_IMAGE_NAME }}${{ matrix.variant.suffix }}${{ matrix.gpu.suffix }}
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            SOURCE_SUFFIX=${{ matrix.variant.suffix }}${{ matrix.gpu.suffix }}
           oci: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
