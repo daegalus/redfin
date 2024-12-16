@@ -35,10 +35,10 @@ jobs:
     strategy:
       matrix:
         variant:
-          - {suffix: "-main", description: ""}
+          - {suffix: "", description: ""}
           - {suffix: "-dx", description: "Developer Experience"}
         gpu:
-          - {suffix: "-main", description: ""}
+          - {suffix: "", description: ""}
           - {suffix: "-nvidia", description: "with Nvidia"}
 
     steps:
@@ -94,6 +94,7 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
+          flavor: m
           images: |
             ${{ env.MY_IMAGE_NAME }}${{ matrix.variant.suffix }}${{ matrix.gpu.suffix }}
 
