@@ -22,9 +22,9 @@ dnf5 -y install --allowerasing \
   kernel-tools-$KERNEL_VERSION \
   kernel-tools-libs-$KERNEL_VERSION \
   asusctl \
-  supergfxctl \
-  xone-kmod-common \
-  v4l2loopback \
+  kmod-xone \
+  kmod-v4l2loopback \
+  kmod-wl \
   virtualbox-guest-additions
 
 # If SUFFIX contains "nvidia", install Nvidia Drivers
