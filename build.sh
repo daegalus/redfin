@@ -9,7 +9,7 @@ dnf5 config-manager addrepo --from-repofile=https://copr.fedorainfracloud.org/co
 dnf5 config-manager addrepo --from-repofile=https://copr.fedorainfracloud.org/coprs/lukenukem/asus-linux/repo/fedora-41/lukenukem-asus-linux-fedora-41.repo
 
 # Install Kernel
-KERNEL_VERSION=dnf list --showduplicates kernel --quiet | grep "x86_64" | grep rog | awk '{print $2}'
+KERNEL_VERSION=`dnf5 list --showduplicates kernel --quiet | grep "x86_64" | grep rog | awk '{print $2}'`
 dnf5 -y remove kernel* && rm -r /root
 dnf5 -y install --allowerasing \
   kernel-$KERNEL_VERSION \
