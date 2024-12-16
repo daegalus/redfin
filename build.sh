@@ -10,7 +10,7 @@ dnf5 config-manager addrepo --from-repofile=https://copr.fedorainfracloud.org/co
 
 # Install Kernel
 dnf5 -y remove kernel* && rm -r /root
-dnf5 dnf5 -y install --allowerasing kernel asusctl supergfxctl
+dnf5 -y install --allowerasing kernel asusctl supergfxctl
 
 # Install GPU Switcher
 curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https://extensions.gnome.org/extension-data/gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
