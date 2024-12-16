@@ -22,7 +22,8 @@ dnf5 -y install --allowerasing \
   kernel-tools-$KERNEL_VERSION \
   kernel-tools-libs-$KERNEL_VERSION \
   asusctl \
-  virtualbox-guest-additions
+  virtualbox-guest-additions \
+  akmods
 
 # If SUFFIX contains "nvidia", install Nvidia Drivers
 if [[ $SUFFIX == *"nvidia"* ]]; then
