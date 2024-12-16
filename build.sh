@@ -10,7 +10,10 @@ dnf5 config-manager addrepo --from-repofile=https://copr.fedorainfracloud.org/co
 
 # Install Kernel
 KERNEL_VERSION=`dnf5 list --showduplicates kernel --quiet | grep "x86_64" | grep rog | awk '{print $2}'`
-dnf5 -y remove kernel* && rm -r /root
+for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs ; 
+  do rpm --erase $pkg --nodeps ; 
+done
+rm -r /root
 dnf5 -y install --allowerasing \
   kernel-$KERNEL_VERSION \
   kernel-core-$KERNEL_VERSION \
@@ -25,15 +28,9 @@ dnf5 -y install --allowerasing \
   virtualbox-guest-additions \
   akmods
 
-# If SUFFIX contains "nvidia", install Nvidia Drivers
-if [[ $SUFFIX == *"nvidia"* ]]; then
-  dnf5 -y install --allowerasing \
-    nvidia-driver \
-    nvidia-driver-cuda \
-    nvidia-settings \
-    nvidia-kmod-common \
-    kmod-nvidia
-fi
+#dnf5 -y remove kernel* && 
+
+dnf5 dnf5 -y install --allowerasing kernel kernel-coreasusctl supergfxctl
 
 # Install GPU Switcher
 curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https://extensions.gnome.org/extension-data/gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
@@ -41,4 +38,4 @@ gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 
 # Refresh Drivers (primarily Nvidia) for new Kernel
-akmods
+sudo akmods
