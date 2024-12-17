@@ -1,4 +1,4 @@
-#!/bin/bash
+o#!/bin/bash
 
 set -ouex pipefail
 
@@ -36,4 +36,4 @@ gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 
 # Refresh Drivers (primarily Nvidia) for new Kernel
-sudo akmods
+akmods
