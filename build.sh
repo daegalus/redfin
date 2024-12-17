@@ -24,9 +24,7 @@ dnf5 -y install --allowerasing \
   kernel-modules-extra-$KERNEL_VERSION \
   kernel-tools-$KERNEL_VERSION \
   kernel-tools-libs-$KERNEL_VERSION \
-  asusctl \
-  virtualbox-guest-additions \
-  akmods
+  asusctl
 
 #dnf5 -y remove kernel* && 
 
@@ -34,6 +32,3 @@ dnf5 -y install --allowerasing \
 curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https://extensions.gnome.org/extension-data/gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
-
-# Refresh Drivers (primarily Nvidia) for new Kernel
-akmods
