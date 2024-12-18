@@ -32,4 +32,4 @@ curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https
 gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 
-rpm-ostree initramfs --enable --force-sync
+rpm-ostree initramfs --enable
