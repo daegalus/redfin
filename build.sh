@@ -14,6 +14,7 @@ for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-
   do rpm --erase $pkg --nodeps ; 
 done
 rm -r /root
+
 dnf5 -y install --allowerasing \
   kernel-$KERNEL_VERSION \
   kernel-core-$KERNEL_VERSION \
@@ -26,9 +27,9 @@ dnf5 -y install --allowerasing \
   kernel-tools-libs-$KERNEL_VERSION \
   asusctl
 
-#dnf5 -y remove kernel* && 
-
 # Install GPU Switcher
 curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https://extensions.gnome.org/extension-data/gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
+
+dracut --regenerate-all -f
