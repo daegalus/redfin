@@ -25,11 +25,17 @@ dnf5 -y install --allowerasing \
   kernel-modules-extra-$KERNEL_VERSION \
   kernel-tools-$KERNEL_VERSION \
   kernel-tools-libs-$KERNEL_VERSION \
-  asusctl
+  kernel-uki-virt-$KERNEL_VERSION \
+  kernel-uki-virt-addons-$KERNEL_VERSION \
+  asusctl \
+  asusctl-rog-gui
 
 # Install GPU Switcher
 curl -o gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip https://extensions.gnome.org/extension-data/gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 gnome-extensions install ./gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 rm gpu-switcher-supergfxctlchikobara.github.io.v9.shell-extension.zip
 
-rpm-ostree initramfs --enable
+QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-(|'"$KERNEL_SUFFIX"'-)(\d+\.\d+\.\d+)' | sed -E 's/kernel-(|'"$KERNEL_SUFFIX"'-)//')"
+/usr/libexec/rpm-ostree/wrapped/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+
+chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
