@@ -53,6 +53,8 @@ COPY branding.sh /tmp/branding.sh
 RUN chmod +x /tmp/build.sh /tmp/branding.sh
 
 ENV SUFFIX = ${SOURCE_SUFFIX}
+ENV IMAGE = "${SOURCE_IMAGE}${SOURCE_SUFFIX}"
+
 RUN mkdir -p /var/lib/alternatives && \
     /tmp/build.sh && \
     /tmp/branding.sh && \
