@@ -16,6 +16,7 @@ done
 rm -r /root
 
 dnf5 -y install --allowerasing \
+  systemd \
   kernel-$KERNEL_VERSION \
   kernel-core-$KERNEL_VERSION \
   kernel-devel-$KERNEL_VERSION \
