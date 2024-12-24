@@ -32,7 +32,7 @@ case "${IMAGE}" in
 esac
 
 image_flavor="main"
-image_suffix="${suffix}"
+image_suffix="${SUFFIX:-}"
 
 if [[ "$IMAGE" =~ dx ]]; then
     image_flavor="dx"
