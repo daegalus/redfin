@@ -44,11 +44,52 @@ if [[ $SUFFIX == *"nvidia"* ]]; then
   rpm --erase kmod-nvidia --nodeps ; 
 fi
 
+REMOVE_LIST=(
+  kmod-openrazer
+  kmod-v4l2loopback
+  kmod-xone
+  kernel
+  kernel-core
+  kernel-modules
+  kernel-modules-core
+  kernel-modules-extra
+)
+
+INSTALL_LIST=(
+  /tmp/akmods-rpms/kmods/*xone*.rpm
+  /tmp/akmods-rpms/kmods/*openrazer*.rpm
+  /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
+  /tmp/akmods-rpms/kmods/*wl*.rpm
+  /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm
+  /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm
+  /tmp/akmods-extra-rpms/kmods/*vhba*.rpm
+  /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm
+  /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm
+  #/tmp/akmods-extra-rpms/kmods/*evdi*.rpm
+  #/tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
+)
+
+REMOVE_LIST_DX=(
+  kmod-kvmfr
+  kernel-devel
+  kernel-devel-matched
+)
+
+INSTALL_LIST_DX=(
+  /tmp/akmods-rpms/kmods/*kvmfr*.rpm
+)
+
 # Install Kernel
 KERNEL_VERSION=$(dnf5 list --showduplicates kernel --quiet | grep "x86_64" | grep rog | awk '{print $2}')
-for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-devel kernel-devel-matched kmod-kvmfr kmod-openrazer kmod-v4l2loopback kmod-xone ; 
-  do rpm --erase $pkg --nodeps ; 
-done
+if [[ $SUFFIX == *"dx"* ]]; then
+  for pkg in "${REMOVE_LIST_DX[@]}" "${REMOVE_LIST[@]}"; do
+    rpm --erase $pkg --nodeps ; 
+  done
+else
+  for pkg in "${REMOVE_LIST[@]}"; do
+    rpm --erase $pkg --nodeps ; 
+  done
+fi
 
 # Replace kernel with rpm-ostree
 rpm-ostree override replace \
@@ -56,22 +97,14 @@ rpm-ostree override replace \
         /tmp/kernel-rpms/kernel-[0-9]*.rpm \
         /tmp/kernel-rpms/kernel-core-*.rpm \
         /tmp/kernel-rpms/kernel-modules-*.rpm \
-        /tmp/kernel-rpms/kernel-devel-*.rpm \
         /tmp/kernel-rpms/kernel-uki-virt-*.rpm
 
-rpm-ostree override replace --experimental \
-    /tmp/akmods-rpms/kmods/*kvmfr*.rpm \
-    /tmp/akmods-rpms/kmods/*xone*.rpm \
-    /tmp/akmods-rpms/kmods/*openrazer*.rpm \
-    /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
-    /tmp/akmods-rpms/kmods/*wl*.rpm \
-    /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
-    /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm \
-    /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
-    /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm \
-    /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm
-    #/tmp/akmods-extra-rpms/kmods/*evdi*.rpm
-    #/tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
+if [[ $SUFFIX == *"dx"* ]]; then
+  rpm-ostree override replace --experimental /tmp/kernel-rpms/kernel-devel-*.rpm
+  rpm-ostree override replace --experimental "${INSTALL_LIST[@]}" "${INSTALL_LIST_DX[@]}"
+else
+  rpm-ostree override replace --experimental "${INSTALL_LIST[@]}"
+fi
 
 if [[ $SUFFIX == *"nvidia"* ]]; then
   rpm-ostree override replace --experimental \
