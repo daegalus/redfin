@@ -46,7 +46,7 @@ fi
 
 # Install Kernel
 KERNEL_VERSION=$(dnf5 list --showduplicates kernel --quiet | grep "x86_64" | grep rog | awk '{print $2}')
-for pkg in kmod-kvmfr kmod-openrazer kmod-v4l2loopback kmod-xone kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-devel kernel-devel-matched; 
+for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-devel kernel-devel-matched kmod-kvmfr kmod-openrazer kmod-v4l2loopback kmod-xone ; 
   do rpm --erase $pkg --nodeps ; 
 done
 
