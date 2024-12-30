@@ -2,20 +2,6 @@
 
 set ${SET_X:+-x} -eou pipefail
 
-if [[ "${IMAGE}" =~ cosmic|ucore ]]; then
-    tee /usr/share/ublue-os/image-info.json <<'EOF'
-{
-  "image-name": "",
-  "image-flavor": "",
-  "image-vendor": "daegalus",
-  "image-ref": "ostree-image-signed:docker://ghcr.io/daegalus/redfin",
-  "image-tag": "",
-  "base-image-name": "",
-  "fedora-version": ""
-}
-EOF
-fi
-
 case "${IMAGE}" in
 "bazzite"*|"bluefin"*)
     base_image="silverblue"
@@ -36,11 +22,11 @@ image_suffix="${SUFFIX:-}"
 
 if [[ "$IMAGE" =~ dx ]]; then
     image_flavor="dx"
-    //image_suffix="-dx"
+    #image_suffix="-dx"
 fi
 if [[ "$IMAGE" =~ nvidia ]]; then
     image_flavor="nvidia"
-    //image_suffix="-nvidia"
+    #image_suffix="-nvidia"
 fi
 
 # Branding

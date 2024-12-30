@@ -38,40 +38,37 @@ ARG SOURCE_SUFFIX="-dx-nvidia"
 ## SOURCE_TAG arg must be a version built for the specific image: eg, 39, 40, gts, latest
 ARG SOURCE_TAG="latest"
 
-
 ### 2. SOURCE IMAGE
 ## this is a standard Containerfile FROM using the build ARGs above to select the right upstream image
 FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
+ARG SOURCE_IMAGE="bluefin"
+ARG SOURCE_SUFFIX="-dx-nvidia"
+ARG SOURCE_TAG="latest"
+ENV SUFFIX="${SOURCE_SUFFIX}"
+ENV IMAGE="${SOURCE_IMAGE}${SOURCE_SUFFIX}"
 
 
 ### 3. MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the build.sh script
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.11-666.rog.fc41.x86_64}"
 
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.12.5-204.bazzite.fc41.x86_64}"
-
-FROM ghcr.io/ublue-os/asus-kernel:41 AS kernel
-FROM ghcr.io/ublue-os/akmods:asus-41 AS akmods
-FROM ghcr.io/ublue-os/akmods-extra:asus-41 AS akmods-extra
-FROM ghcr.io/ublue-os/akmods-nvidia-open:asus-41 AS akmods-nvidia-open
-
-
+COPY gnome-extensions.sh /tmp/gnome-extensions.sh
+RUN chmod +x /tmp/gnome-extensions.sh
+RUN /tmp/gnome-extensions.sh && \
+    ostree container commit
 
 COPY build.sh /tmp/build.sh
-COPY branding.sh /tmp/branding.sh
-RUN chmod +x /tmp/build.sh /tmp/branding.sh
-
-ENV SUFFIX = ${SOURCE_SUFFIX}
-ENV IMAGE = "${SOURCE_IMAGE}${SOURCE_SUFFIX}"
-
-RUN --mount=type=bind,from=kernel,src=/tmp/rpms,dst=/tmp/kernel-rpms \
-    --mount=type=bind,from=akmods,src=/tmp/rpms,dst=/tmp/akmods-rpms \
-    --mount=type=bind,from=akmods-extra,src=/tmp/rpms,dst=/tmp/akmods-extra-rpms \
-    --mount=type=bind,from=akmods-nvidia-open,src=/tmp/rpms,dst=/tmp/akmods-nvidia-open-rpms \
-    mkdir -p /var/lib/alternatives && \
+RUN chmod +x /tmp/build.sh
+RUN mkdir -p /var/lib/alternatives && \
     /tmp/build.sh && \
-    /tmp/branding.sh && \
     ostree container commit
+
+COPY branding.sh /tmp/branding.sh
+RUN chmod +x /tmp/branding.sh
+RUN /tmp/branding.sh && \
+    ostree container commit
+    
 ## NOTES:
 # - /var/lib/alternatives is required to prevent failure with some RPM installs
 # - All RUN commands must end with ostree container commit
