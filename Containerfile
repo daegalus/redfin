@@ -33,7 +33,7 @@ ARG SOURCE_IMAGE="bluefin"
 # - stable-zfs
 # - stable-nvidia-zfs
 # - (and the above with testing rather than stable)
-ARG SOURCE_SUFFIX="-dx-nvidia"
+ARG SOURCE_SUFFIX="-dx-nvidia-open"
 
 ## SOURCE_TAG arg must be a version built for the specific image: eg, 39, 40, gts, latest
 ARG SOURCE_TAG="latest"
@@ -42,10 +42,11 @@ ARG SOURCE_TAG="latest"
 ## this is a standard Containerfile FROM using the build ARGs above to select the right upstream image
 FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
 ARG SOURCE_IMAGE="bluefin"
-ARG SOURCE_SUFFIX="-dx-nvidia"
+ARG SOURCE_SUFFIX="-dx-nvidia-open"
 ARG SOURCE_TAG="latest"
 ENV SUFFIX="${SOURCE_SUFFIX}"
 ENV IMAGE="${SOURCE_IMAGE}${SOURCE_SUFFIX}"
+ENV SOURCE_TAG="${SOURCE_TAG}"
 
 
 ### 3. MODIFICATIONS

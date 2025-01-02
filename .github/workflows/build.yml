@@ -39,7 +39,7 @@ jobs:
           - {suffix: "-dx", description: "Developer Experience"}
         gpu:
           - {suffix: "", description: ""}
-          - {suffix: "-nvidia", description: "with Nvidia"}
+          - {suffix: "-nvidia-open", description: "with Nvidia"}
 
     steps:
       # Checkout push-to-registry action GitHub repository

@@ -34,7 +34,7 @@ cat <<<"$(jq ".\"image-name\" |= \"redfin${image_suffix}\" |
               .\"image-flavor\" |= \"${image_flavor}\" |
               .\"image-vendor\" |= \"daegalus\" |
               .\"image-ref\" |= \"ostree-image-signed:docker://ghcr.io/daegalus/redfin${image_suffix}\" |
-              .\"image-tag\" |= \"${IMAGE}${BETA:-}\" |
+              .\"image-tag\" |= \"${SOURCE_TAG}${BETA:-}\" |
               .\"base-image-name\" |= \"${base_image}\" |
               .\"fedora-version\" |= \"$(rpm -E %fedora)\"" \
     </usr/share/ublue-os/image-info.json)" \
