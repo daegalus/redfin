@@ -1,3 +1,7 @@
+# WARNING
+
+I have disabled actions and deleted all images. I have discovered that this image is no longer needed, as for most Asus laptops, everything is upstreamed already. The true culprits to most issues is the kernel moduls amd_pmc and legion_laptop (in bazzite). Disabling those makes everything work fine, at least on my asus image. I will leave this repo up as reference and if anyone wants to fork and build their own.
+
 # image-template
 
 # Purpose
